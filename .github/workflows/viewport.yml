@@ -1,0 +1,28 @@
+   Local $opt_fullscreen_persistant = true
+    Local $opt_fullscreen = $opt_fullscreen_persistant
+    Local $dockspace_flags = $transparent_bg ? $ImGuiDockNodeFlags_PassthruCentralNode : $ImGuiDockNodeFlags_None
+
+    Local $window_flags = $ImGuiWindowFlags_NoDocking
+
+    $viewport = _ImGui_GetMainViewport()
+    _ImGui_SetNextWindowPos($viewport.Pos_x, $viewport.Pos_y)
+    _ImGui_SetNextWindowSize($viewport.Size_x, $viewport.Size_y)
+    _ImGui_SetNextWindowViewport($viewport.ID)
+    _ImGui_PushStyleVar($ImGuiStyleVar_WindowRounding, 0)
+    _ImGui_PushStyleVar($ImGuiStyleVar_WindowBorderSize, 0)
+    $window_flags = BitOR($window_flags, $ImGuiWindowFlags_NoTitleBar, $ImGuiWindowFlags_NoCollapse, $ImGuiWindowFlags_NoResize, $ImGuiWindowFlags_NoMove)
+    $window_flags = BitOR($window_flags, $ImGuiWindowFlags_NoBringToFrontOnFocus, $ImGuiWindowFlags_NoNavFocus)
+
+    if BitAND($dockspace_flags, $ImGuiDockNodeFlags_PassthruCentralNode) Then $window_flags = BitOR($window_flags, $ImGuiWindowFlags_NoBackground)
+
+    _ImGui_PushStyleVarPos($ImGuiStyleVar_WindowPadding, 0, 0)
+    _ImGui_Begin("main_dockspace", False, $window_flags)
+    _ImGui_PopStyleVar()
+
+    if ($opt_fullscreen) Then _ImGui_PopStyleVar(2)
+
+    $dockspace_id = _ImGui_GetID("MyDockSpace")
+    _ImGui_DockSpace($dockspace_id, 0, 0, $dockspace_flags)
+
+    _ImGui_End()
+EndFunc
